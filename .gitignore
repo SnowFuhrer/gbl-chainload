@@ -22,7 +22,9 @@ tests/*/test_*
 !tests/*/test_*.c
 !tests/*/test_*.h
 !tests/*/test_*.sh
-
+extracted*
+logfs*
+scripts/bin
 # Host test helper binaries — sources tracked, compiled binaries not
 tests/host/helpers/*
 !tests/host/helpers/*.c

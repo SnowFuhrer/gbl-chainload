@@ -67,6 +67,8 @@ int main (int argc, char **argv) {
   if (OemStr != NULL) {
     if (strcmp (OemStr, "oneplus") == 0) {
       Oem = GBL_OEM_ONEPLUS;
+    } else if (strcmp (OemStr, "redmagic") == 0) {
+      Oem = GBL_OEM_REDMAGIC;
     } else {
       fprintf (stderr, "error: unknown --oem '%s'\n", OemStr);
       return 2;

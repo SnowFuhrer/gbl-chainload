@@ -257,14 +257,10 @@ int derive_main(int argc, char **argv) {
     }
 
     if (!found_os) {
-        fprintf(stderr,
-            "error: vbmeta has no com.android.build.boot.os_version property\n");
-        free(img); return 1;
+        strcpy(os_ver_str, "0.0.0");
     }
     if (!found_spl) {
-        fprintf(stderr,
-            "error: vbmeta has no com.android.build.boot.security_patch property\n");
-        free(img); return 1;
+        strcpy(spl_str, "2000-01-01");
     }
 
     /* --- encode os_version --- */

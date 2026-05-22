@@ -5,7 +5,7 @@
 #define GBL_PATCH_SCOPE_H_
 
 /* OEM group selector. NONE = universal only. */
-typedef enum { GBL_OEM_NONE = 0, GBL_OEM_ONEPLUS = 1 } GBL_OEM;
+typedef enum { GBL_OEM_NONE = 0, GBL_OEM_ONEPLUS = 1, GBL_OEM_REDMAGIC = 2 } GBL_OEM;
 
 /* Aggregate the runtime patch table: universal, then (if oem != NONE) the
    OEM group, then (if include_mode1) the mode_1 group. Replaces the

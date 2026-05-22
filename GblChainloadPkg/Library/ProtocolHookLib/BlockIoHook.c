@@ -383,9 +383,7 @@ InstallBlockIoHook (VOID)
     }
 
     if (Pass == 0 && ReserveInstalled == 0) {
-      gBS->FreePool (Handles);
-      DEBUG ((DEBUG_ERROR, "BlockIoHook: no oplus/oppo reserve1 BlockIo slot installed\n"));
-      return EFI_NOT_FOUND;
+      DEBUG ((DEBUG_WARN, "BlockIoHook: no oplus/oppo reserve1 BlockIo slot installed, continuing anyway\n"));
     }
   }
 
