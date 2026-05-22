@@ -1,1 +1,0 @@
-python3 efisp-package.py   --abl abl_a.img   --mode 2   --efi ../dist/mode-2.efi   --stock-vbmeta vbmeta_a.img   --oem redmagic   --out mode2_patched.efi

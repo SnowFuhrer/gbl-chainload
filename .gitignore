@@ -25,6 +25,7 @@ tests/*/test_*
 extracted*
 logfs*
 scripts/bin
+scripts/command.txt
 # Host test helper binaries — sources tracked, compiled binaries not
 tests/host/helpers/*
 !tests/host/helpers/*.c
@@ -32,7 +33,9 @@ tests/host/helpers/*
 !tests/host/helpers/*.sh
 !tests/host/helpers/Makefile
 tests/host/.last/
-
+tests/scratch*
+*img
+*efi
 # Session/tooling state
 .claude/
 .omc/
@@ -74,3 +77,11 @@ __pycache__/
 # OS
 .DS_Store
 Thumbs.db
+
+tools/abl-patcher/abl-patcher-linux
+tools/fv-unwrap/fv-unwrap-linux
+tools/gbl-commit/gbl-commit-linux
+tools/gbl-pack/gbl-pack-linux
+tools/gblp1-inspect/gblp1-inspect-linux
+tools/mode2-profile/mode2-profile-linux
+tools/vbmeta-graft/vbmeta-graft-linux
