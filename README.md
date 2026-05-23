@@ -1,6 +1,7 @@
 # gbl-chainload
 
-EFI System Partition (EFISP) chainloader for OnePlus/Oppo devices using Qualcomm's GBL/EFISP load mechanism. Patches the active-slot ABL in memory, installs targeted protocol hooks, and hands off to the patched ABL.
+EFI System Partition (EFISP) chainloader for ZTE devices using Qualcomm's GBL/EFISP load mechanism. Patches the active-slot ABL in memory, installs targeted protocol hooks, and hands off to the patched ABL.
+Unsure if it works on original Oneplus devices still. I have tested mainly mode-2
 
 ## Status
 
