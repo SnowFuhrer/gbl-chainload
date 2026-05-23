@@ -19,8 +19,8 @@ extern CONST PATCH_DESC kUniversalPatches[];
 extern CONST UINTN      kUniversalPatchesCount;
 extern CONST PATCH_DESC kOemOneplusPatches[];
 extern CONST UINTN      kOemOneplusPatchesCount;
-extern CONST PATCH_DESC kOemRedmagicPatches[];
-extern CONST UINTN      kOemRedmagicPatchesCount;
+extern CONST PATCH_DESC kOemZtePatches[];
+extern CONST UINTN      kOemZtePatchesCount;
 
 /* kMode1Patches is needed when GBL_MODE >= 1 (on-device) *or* when building
    for the host (abl-patcher): the object is always linked in both cases and
@@ -52,8 +52,8 @@ InitAggregate (VOID)
   for (i = 0; i < kOemOneplusPatchesCount && n < MAX_PATCHES; ++i) {
     gAggregated[n++] = kOemOneplusPatches[i];
   }
-  for (i = 0; i < kOemRedmagicPatchesCount && n < MAX_PATCHES; ++i) {
-    gAggregated[n++] = kOemRedmagicPatches[i];
+  for (i = 0; i < kOemZtePatchesCount && n < MAX_PATCHES; ++i) {
+    gAggregated[n++] = kOemZtePatches[i];
   }
 #if (GBL_MODE >= 1)
   for (i = 0; i < kMode1PatchesCount && n < MAX_PATCHES; ++i) {
@@ -90,9 +90,9 @@ DynamicPatchLib_EnsureInitScoped (GBL_OEM oem, int include_mode1)
   if (oem == GBL_OEM_ONEPLUS)
     for (i = 0; i < kOemOneplusPatchesCount && n < MAX_PATCHES; ++i)
       gAggregated[n++] = kOemOneplusPatches[i];
-  if (oem == GBL_OEM_REDMAGIC)
-    for (i = 0; i < kOemRedmagicPatchesCount && n < MAX_PATCHES; ++i)
-      gAggregated[n++] = kOemRedmagicPatches[i];
+  if (oem == GBL_OEM_ZTE)
+    for (i = 0; i < kOemZtePatchesCount && n < MAX_PATCHES; ++i)
+      gAggregated[n++] = kOemZtePatches[i];
   if (include_mode1)
     for (i = 0; i < kMode1PatchesCount && n < MAX_PATCHES; ++i)
       gAggregated[n++] = kMode1Patches[i];

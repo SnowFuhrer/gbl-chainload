@@ -13,7 +13,7 @@ typedef enum {
   SCOPE_UNIVERSAL     = 0,
   SCOPE_OEM_ONEPLUS   = 1,
   SCOPE_MODE_1        = 2,
-  SCOPE_OEM_REDMAGIC  = 3,
+  SCOPE_OEM_ZTE       = 3,
   /* SCOPE_MODE_2 and SCOPE_OEM_<other> can be added by later plans. */
 } PATCH_SCOPE;
 

@@ -16,7 +16,7 @@ SRCS := abl-patcher.c \
         $(DPL)/PatchTable.c \
         $(DPL)/universal/universal.c \
         $(DPL)/oem/oneplus_canoe.c \
-        $(DPL)/oem/redmagic_nx809j.c \
+        $(DPL)/oem/zte.c \
         $(DPL)/mode_1/mode_1.c
 
 abl-patcher: $(SRCS)

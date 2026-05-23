@@ -21,7 +21,7 @@
   PatchTable.c
   universal/universal.c
   oem/oneplus_canoe.c
-  oem/redmagic_nx809j.c
+  oem/zte.c
   mode_1/mode_1.c
 
 [Packages]

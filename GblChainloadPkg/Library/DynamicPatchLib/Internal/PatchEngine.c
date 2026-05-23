@@ -56,7 +56,7 @@ DynamicPatch_Apply (
         (P->Scope == SCOPE_UNIVERSAL)    ? "universal"    :
         (P->Scope == SCOPE_OEM_ONEPLUS)  ? "oem-oneplus"  :
         (P->Scope == SCOPE_MODE_1)       ? "mode-1"       :
-        (P->Scope == SCOPE_OEM_REDMAGIC) ? "oem-redmagic" : "unknown";
+        (P->Scope == SCOPE_OEM_ZTE)      ? "oem-zte"      : "unknown";
 #ifdef __HOST_BUILD__
       fprintf (stderr,
                "DynamicPatch: %s [%s, %s] -> %s\n",

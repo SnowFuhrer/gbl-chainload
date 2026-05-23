@@ -1,9 +1,6 @@
-/** @file redmagic_nx809j.c — RedMagic family OEM patches.
+/** @file zte.c — ZTE/Nubia/Redmagic family OEM patches.
 
-  Empty stub array for RedMagic patches.
-  Mode 1 fakelocks the bootloader via QCOM_VERIFIEDBOOT_PROTOCOL,
-  bypassing the orange state screen natively, so an explicit ABL instruction
-  patch is not currently needed.
+  Bypasses warning screens and delays for ZTE/Nubia/Redmagic devices.
 **/
 
 #include "../../../Include/Library/PatchDesc.h"
@@ -16,7 +13,7 @@ STATIC CONST CHAR8 kOrangeWarnStr[] = "Device is unlocked, Skipping boot verific
 STATIC CONST CHAR8 kYellowWarnStr[] = "Your device has loaded a different operating system";
 
 PATCH_OUTCOME
-ApplyRedmagicWarningScreens (
+ApplyZteWarningScreens (
   IN OUT UINT8  *Buf,
   IN     UINT32  Size
   )
@@ -64,14 +61,14 @@ ApplyRedmagicWarningScreens (
   return Patched ? PATCH_OK : PATCH_MISS;
 }
 
-CONST PATCH_DESC kOemRedmagicPatches[] = {
+CONST PATCH_DESC kOemZtePatches[] = {
   {
-    .Name      = "patch-redmagic-warning-screens",
-    .Scope     = SCOPE_OEM_REDMAGIC,
+    .Name      = "patch-zte-warning-screens",
+    .Scope     = SCOPE_OEM_ZTE,
     .Mandatory = FALSE,
-    .Apply     = ApplyRedmagicWarningScreens,
+    .Apply     = ApplyZteWarningScreens,
   },
 };
 
-CONST UINTN kOemRedmagicPatchesCount =
-  sizeof (kOemRedmagicPatches) / sizeof (kOemRedmagicPatches[0]);
+CONST UINTN kOemZtePatchesCount =
+  sizeof (kOemZtePatches) / sizeof (kOemZtePatches[0]);
