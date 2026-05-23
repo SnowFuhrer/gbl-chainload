@@ -48,6 +48,36 @@ static int read_file(const char *p, uint8_t **out, size_t *out_size) {
     return 0;
 }
 
+/* read_back_uncached: read the first `need` bytes of `path` for post-write
+   verification, evicting the page cache first so a write that *returned success
+   but never persisted* — a read-only partition, a bio-dropping kernel write
+   guard (e.g. Baseband Guard in some configs), or an unsurfaced writeback
+   error — is caught instead of being masked by cached-but-correct bytes.
+   read_file() (used for the src/backup scratch files) reads through the cache
+   on purpose; only this device read-back must bypass it.
+
+   POSIX_FADV_DONTNEED drops the (clean, already-fsync'd) cached pages, so the
+   subsequent read repopulates them from the device. It's advisory, but the
+   kernel honours it for clean pages, which is exactly our case after the
+   write's fsync+sync. Returns the number of bytes read (>= 0; the caller
+   treats got < need as a verify failure) and sets *out (malloc'd, caller
+   frees), or -1 on hard error. */
+static ssize_t read_back_uncached(const char *path, size_t need, uint8_t **out) {
+    *out = NULL;
+    int fd = open(path, O_RDONLY);
+    if (fd < 0) { perror(path); return -1; }
+#if defined(POSIX_FADV_DONTNEED)
+    posix_fadvise(fd, 0, 0, POSIX_FADV_DONTNEED);
+#endif
+    uint8_t *b = malloc(need);
+    if (!b) { close(fd); return -1; }
+    ssize_t r = 0; size_t got = 0;
+    while (got < need && (r = read(fd, b + got, need - got)) > 0) got += (size_t)r;
+    close(fd);
+    *out = b;
+    return (ssize_t)got;
+}
+
 static int write_file(const char *p, const uint8_t *buf, size_t n) {
     int fd = open(p, O_WRONLY | O_CREAT | O_TRUNC, 0600);
     if (fd < 0) { perror(p); return -1; }
@@ -113,14 +143,18 @@ int main(int argc, char **argv) {
     }
 
     if (verify) {
-        uint8_t *check_buf = NULL; size_t check_size = 0;
-        if (read_file(dst, &check_buf, &check_size) < 0) { free(src_buf); return 1; }
+        /* Read the first src_size bytes straight from the device, bypassing
+           the page cache, so a write that returned success but never landed
+           is caught here instead of matching cached-but-correct bytes. */
+        uint8_t *check_buf = NULL;
+        ssize_t check_got = read_back_uncached(dst, src_size, &check_buf);
+        if (check_got < 0) { free(src_buf); return 1; }
 
         /* Guard: partition/file must be at least as large as what we wrote. */
-        if (check_size < src_size) {
+        if ((size_t)check_got < src_size) {
             fprintf(stderr,
-                "gbl-commit: verify error: read back %zu bytes but wrote %zu\n",
-                check_size, src_size);
+                "gbl-commit: verify error: read back %zd bytes but wrote %zu\n",
+                check_got, src_size);
             free(check_buf);
             if (backup) restore_backup(dst, backup);
             free(src_buf);
@@ -129,17 +163,19 @@ int main(int argc, char **argv) {
 
         uint8_t want[32], got[32];
         gbl_sha256(src_buf, src_size, want);
-        /* Hash only the first src_size bytes of what was read back. */
         gbl_sha256(check_buf, src_size, got);
         free(check_buf);
 
         if (memcmp(want, got, 32) != 0) {
-            fprintf(stderr, "gbl-commit: SHA mismatch after write\n");
+            fprintf(stderr,
+                "gbl-commit: SHA mismatch after write — device read-back "
+                "differs from what was written; the write was blocked or did "
+                "not persist (write-protected partition or kernel write guard)\n");
             if (backup) restore_backup(dst, backup);
             free(src_buf);
             return 3;
         }
-        fprintf(stderr, "gbl-commit: SHA verify ok\n");
+        fprintf(stderr, "gbl-commit: SHA verify ok (uncached device read-back)\n");
     }
 
     free(src_buf);
